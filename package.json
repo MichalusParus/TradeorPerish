@@ -1,0 +1,15 @@
+{
+  "name": "tradeorperish",
+  "version": "1.0.0",
+  "description": "Js trade survival game",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Js",
+    "game"
+  ],
+  "author": "Michalus Parus",
+  "license": "ISC"
+}

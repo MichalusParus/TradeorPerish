@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade or Perish</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script/script.js"></script>
+    <script src="script/economy.js"></script>
+</head>
+<body onkeydown="keyPressed(event)" onkeyup="keyRelesed(event)">
+    <!-- HEADER UI -->
+    <div id="start">
+        <div id="startmenu">
+            <h1 class="title">Trade or Perish</h1>
+            <button onclick="newGame()">-NEW GAME-</button>
+            <button onclick="controlsGame()">-CONTROLS-</button>
+            <button onclick="infoGame()">-WELCOME-</button>
+            <div class="startsub" id="infogame">
+                <p>Welcome in Trade or Perish. Fullfill your deepest fantasy about naval trading and history. Enjoy realistic simulator and immerse yourself to beatifull world full of ships, sea, goods, slavery and sex. (JS study project)</p><br><br>
+                <p>Consider donating: </p><p> 0x50E539D3455E1a360fE150216f941e26957809ca (BSC, ETH)</p><p>d90e2a94a1f66e325ed04bf514a78d6ee7e39e99 (ronin)</p>
+            </div>
+            <div class="startsub" id="newgame">
+                <h2>Character creation</h2>
+                <p>Character name <input type="text" id="gamename" value="Player1" required></p>
+                <div id="profilpic">
+                    <input type="radio" name="profilpic" id="pic" checked>
+                    <label for="pic"><img src="./src/foto.jpg" alt=""></label>
+                    <input type="radio" name="profilpic" id="pic1">
+                    <label for="pic1"><img src="./src/foto1.jpg" alt=""></label>
+                    <input type="radio" name="profilpic" id="pic2">
+                    <label for="pic2"><img src="./src/foto2.jpg" alt=""></label>
+                    <input type="radio" name="profilpic" id="pic3">
+                    <label for="pic3"><img src="./src/foto3.jpg" alt=""></label>
+                    <input type="radio" name="profilpic" id="pic4">
+                    <label for="pic4"><img src="./src/foto4.jpg" alt=""></label>
+                    <input type="radio" name="profilpic" id="pic5">
+                    <label for="pic5"><img src="./src/foto5.jpg" alt=""></label>
+                </div>
+                <button onclick="startGame()" id="startgamebtn" >-Start Game-</button>
+            </div>
+            <div class="startsub" id="controls">
+                <h2>Controls:</h2>
+                    <p>Movement: W/S/A/D</p>
+                    <p>Action button: Left Mouse</p>
+                    <p>Camera: Mouse wheel</p>
+                    <p>Fullscreen: F11</p>
+            </div>
+        </div>
+    </div>
+    <div id="header">
+        <img src="./src/wheel.png" alt="wheel" id="wheel">
+        <h1 class="title">Trade or Perish</h1>
+        <button onclick="audioOn()" id="audioon">&#128264;</button>
+        <button onclick="audioMuted()" id="muted">	&#128263;</button>
+        <div id="singing"> &#x266c; Sing a Shanty
+            <button onclick="drunkenSailor()" id="drunkensailor">Drunken Sailor</button>
+            <button onclick="wellerman()" id="wellerman">Wellerman</button>
+        </div>
+        <div class="profil">
+            <div id="foto"></div>
+            <div>
+                <div id="name">Michal Sikora</div>
+                <div>Days survived : <span id="score">0</span></div>
+                <div>Inventory : <span id="inventory">45</span>/200</div>
+            </div>
+        </div>
+        <div class="summary">
+            <p><img src="./src/gold.png" alt="gold"> Gold :<span id="gold"> 1000 </span></p>
+            <p><img src="./src/food.png" alt="food"> Food :<span id="food"> 15 </span></p>
+            <p><img src="./src/morale.png" alt="food"> Morale :<span id="morale">100</span></p>
+        </div>
+        <div class="summary">
+            <p><img src="./src/rum.png" alt="rum"> Rum :<span id="rum">30</span><button onclick="giveRum()" class="give"><img src="./src/morale.png" alt="give"> Give to crew</button></p>
+            <p><img src="./src/timber.png" alt="timber"> Timber :<span id="timber">0</span></p>
+            <p><img src="./src/tools.png" alt="tools"> Tools :<span id="tools">0</span></p>
+        </div>
+        <div class="summary">
+            <p><img src="./src/slaves.png" alt="slaves"> Slaves :<span id="slaves">0</span><button onclick="giveSlaves()" class="give"><img src="./src/morale.png" alt="give"> Give for Snu-Snu</button></p>
+            <p><img src="./src/textil.png" alt="textil"> Textil :<span id="textil">0</span></p>
+            <p><img src="./src/guns.png" alt="guns"> Guns :<span id="guns">0</span></p>
+        </div>
+        <div class="summary">
+            <p><img src="./src/tabacco.png" alt="tabacco"> Tabacco :<span id="tabacco">0</span><button onclick="giveTabacco()" class="give"><img src="./src/morale.png" alt="give"> Give to crew</button></p>
+            <p><img src="./src/cotton.png" alt="cotton"> Cotton :<span id="cotton">0</span></p>
+            <p><img src="./src/sugar.png" alt="sugar"> Sugar :<span id="sugar">0</span></p>
+        </div>
+        <img src="./src/anchorlogo.png" alt="wheel" id="anchorlogo">
+    </div>
+    <!-- SOUNDTRACK -->
+    <audio src="./src/audio/sea.wav" id="audiosea"  loop  ></audio>
+    <audio src="./src/audio/city.wav" id="city"  loop  ></audio>
+    <audio src="./src/audio/bells.mp3" id="bells" ></audio>
+    <audio src="./src/audio/drunkensailor.mp3" id="drunkensailor1"></audio>
+    <audio src="./src/audio/wellerman.mp3" id="wellerman1"></audio>
+    <audio src="./src/audio/rum.wav" id="rumaudio"></audio>
+    <audio src="./src/audio/tabbacco.mp3" id="tabaccoaudio"></audio>
+    <audio src="./src/audio/snusnu1.mp3" id="snusnuaudio"></audio>
+    <audio src="./src/audio/snusnu2.mp3" id="snusnuaudio2"></audio>
+    <audio src="./src/audio/log1.mp3" id="loga1"></audio>
+    <audio src="./src/audio/log2.mp3" id="loga2"></audio>
+    <audio src="./src/audio/log3.mp3" id="loga3"></audio>
+    <audio src="./src/audio/log4.mp3" id="loga4"></audio>
+    <audio src="./src/audio/log5.mp3" id="loga5"></audio>
+    <audio src="./src/audio/log6.mp3" id="loga6"></audio>
+    <audio src="./src/audio/log7.mp3" id="loga7"></audio>
+    <audio src="./src/audio/log8.mp3" id="loga8"></audio>
+    <audio src="./src/audio/log9.mp3" id="loga9"></audio>
+    <audio src="./src/audio/log10.mp3" id="loga10"></audio>
+    <audio src="./src/audio/log11.mp3" id="loga11"></audio>
+    <audio src="./src/audio/log12.mp3" id="loga12"></audio>
+    <audio src="./src/audio/log13.mp3" id="loga13"></audio>
+    <audio src="./src/audio/log14.mp3" id="loga14"></audio>
+    <audio src="./src/audio/log15.mp3" id="loga15"></audio>
+    <audio src="./src/audio/log16.mp3" id="loga16"></audio>
+    <audio src="./src/audio/log17.mp3" id="loga17"></audio>
+    <audio src="./src/audio/log18.mp3" id="loga18"></audio>
+    <audio src="./src/audio/log19.mp3" id="loga19"></audio>
+    <audio src="./src/audio/log20.mp3" id="loga20"></audio>
+    <audio src="./src/audio/log21.mp3" id="loga21"></audio>
+    <audio src="./src/audio/log22.mp3" id="loga22"></audio>
+    <audio src="./src/audio/log23.mp3" id="loga23"></audio>
+    <audio src="./src/audio/log24.mp3" id="loga24"></audio>
+
+
+
+    <!-- TOWNMENU -->
+    <div class="townmenu" id="menuhome">
+        <img src="./src/homebig.jpg" alt="home" class="townbig">
+        <img src="./src/homelvl1big.png" alt="home1" class="townbig" id="homelvl1">
+        <img src="./src/homelvl2big.png" alt="home1" class="townbig" id="homelvl2">
+        <img src="./src/warehousebig.png" alt="home1" class="townbig" id="warehouse">
+        <img src="./src/homelvl3big.png" alt="home1" class="townbig" id="homelvl3">
+        <img src="./src/farmabig.png" alt="home1" class="townbig" id="farma">
+        <img src="./src/woodcutterbig.png" alt="home1" class="townbig" id="woodcutter">
+        <img src="./src/productionbig.png" alt="home1" class="townbig" id="production">
+        <img src="./src/villagebig.png" alt="home1" class="townbig" id="village">
+        <img src="./src/homelvl4big.png" alt="home1" class="townbig" id="homelvl4">
+        <img src="./src/northeast.gif" alt="ship" id="shiphomebig">
+        <img src="./src/firstman.png" alt="firstman" id="firstman">
+        <p class="dialog" id="log1">Hey, Captain ... This island looks solid and uninhabited. We should camp here and explore this new world a little bit. Should I issue an order to build a camp? <button onclick="lvlUp1()" >-Build camp-</button> </p>
+        <p class="dialog" id="log2">Sir !! ... It's done. The camp is ready. What should we call this new paradise? <input type="text" id="homename" value="Refuge" required> <button onclick="quest11()" >-Next-</button> </p>
+        <p class="dialog" id="log3">Done, sir ... Great name. Now we should think about the next steps. Our rations have dropped dangerously low and morale is also not great. Let me think .. <br> <button onclick="quest12()" >-Next-</button> </p>
+        <p class="dialog" id="log4">Maybe I have an idea, sir ... I knew a man who had moved to Caer Glovis, a town on the island of Hephaestus, north of here. We could try to build some business connections there. <br> <button onclick="quest13()" >-Next-</button> </p>
+        <p class="dialog" id="log5">We also really have to buy some food or we'll starve to death. And some rum, of course, morale is really low and I'm afraid of rebellion. The clock is ticking, we should hurry. <br> <button onclick="quest14()" >-Leave-</button> </p>
+        <div class="towninfo">
+            <button onclick="menuHomeOff()">&#x24E7;</button>
+            <h1 id="homenamemenu"> YOUR REFUGE </h1>
+            <div class="info">
+                <p id="lvl1info">LVL1: You claimed this unhabited island and built your refuge.</p>
+                <p id="lvl2info">LVL2: You build your first house.</p>
+                <p id="lvl3info">LVL3: You build your first manor</p>
+                <p id="lvl4info">LVL4: You build your first castle</p>
+                <div id="lvldiv">
+                    <button onclick="lvlUp2()" class="lvlbtn" id="lvl2"> 
+                        &#8683; Level up settlement 
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/500 Gold</p>
+                    </button>
+                    <button onclick="lvlUp3()" class="lvlbtn" id="lvl3" > 
+                        &#8683; Level up settlement
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/800 Gold - <span class="timberinfo"></span>/100 Timber - <span class="toolsinfo"></span>/50 tools  <span id="havestorage">0</span>/1 Storage</p> 
+                    </button>
+                    <button onclick="lvlUp4()" class="lvlbtn" id="lvl4"> 
+                        &#8683; Level up settlement
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/1500 Gold - <span class="timberinfo"></span>/100 Timber - <span class="toolsinfo"></span>/50 tools - <span id="havefarm">0</span>/1 Farm  - <span id="havewoodcutter">0</span>/1 Woodcutter</p>
+                    </button>
+                    <button onclick="buildWarehouse()" class="buildbtn" id="buildwarehouse"> 
+                        &#10133; Storage 
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/150 Gold - <span class="timberinfo"></span>/50 Timber - <span class="toolsinfo"></span>/20 tools </p>
+                    </button>
+                    <button onclick="buildWoodCutter()" class="buildbtn slot2" id="buildwoodcutter"> 
+                        &#10133; Woodcutter 
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/400 Gold - <span class="timberinfo"></span>/30 Timber - <span class="toolsinfo"></span>/10 tools</p>
+                    </button>
+                    <button onclick="buildFarm()" class="buildbtn" id="buildfarm"> 
+                        &#10133; Farmland
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/500 Gold - <span class="timberinfo"></span>/30 Timber - <span class="toolsinfo"></span>/10 tools</p>
+                    </button>
+                    <button onclick="buildVillage()" class="buildbtn" id="buildvillage"> 
+                        &#10133; Brewery
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/1000 Gold - <span class="timberinfo"></span>/100 Timber - <span class="toolsinfo"></span>/50 tools </p>
+                    </button>
+                    <button onclick="buildProduction()" class="buildbtn slot2" id="buildproduction"> 
+                        &#10133; Sugar plantage
+                        <p class="lvlupinfo"><span class="goldinfo"></span>/1000 Gold - <span class="timberinfo"></span>/100 Timber - <span class="toolsinfo"></span>/50 tools </p>
+                    </button>
+                </div>
+            </div>
+            <div class="tips"><p>SETTLEMENT BILANCE</p> 
+                <p id="foodtip"><img src="./src/food.png" alt="food">Food + 20 / 12D</p>
+                <p id="timbertip"><img src="./src/timber.png" alt="timber">Timber + 20 / 6D</p>
+                <p id="sugartip"><img src="./src/sugar.png" alt="sugar">Sugar + 60 / 6D</p> 
+                <p id="rumtip"><img src="./src/rum.png" alt="rum">Rum + 20 / 6D (-20 sugar)</p>
+            </div>
+        </div>
+        <div class="market" id="homestorage">
+            <h2> STORAGE </h2> <span class="marketinfo"> -build first</span><br>
+            <div id="homestoragebuild">
+                <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodhomestock">0</span><br><br>
+                    <button onclick="foodHomeTake()">Take +10</button>    
+                    <button onclick="foodHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timberhomestock">0</span><br><br>
+                    <button onclick="timberHomeTake()">Take +10</button>    
+                    <button onclick="timberHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textilhomestock">0</span><br><br>
+                    <button onclick="textilHomeTake()">Take +10</button>    
+                    <button onclick="textilHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slaveshomestock">0</span><br><br>
+                    <button onclick="slavesHomeTake()">Take +10</button>    
+                    <button onclick="slavesHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottonhomestock">0</span><br><br>
+                    <button onclick="cottonHomeTake()">Take +10</button>    
+                    <button onclick="cottonHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumhomestock">0</span><br><br>
+                    <button onclick="rumHomeTake()">Take +10</button>    
+                    <button onclick="rumHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolshomestock">0</span><br><br>
+                    <button onclick="toolsHomeTake()">Take +10</button>    
+                    <button onclick="toolsHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunshomestock">0</span><br><br>
+                    <button onclick="gunsHomeTake()">Take +10</button>    
+                    <button onclick="gunsHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccohomestock">0</span><br><br>
+                    <button onclick="tabaccoHomeTake()">Take +10</button>    
+                    <button onclick="tabaccoHomeGive()">Give -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugarhomestock">0</span><br><br>
+                    <button onclick="sugarHomeTake()">Take +10</button>    
+                    <button onclick="sugarHomeGive()">Give -10</button>        
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="townmenu" id="menucaerglovis">
+        <img src="./src/caerglovisbig.jpg" alt="glovis" class="townbig">
+        <img src="./src/northeast.gif" alt="ship" id="shipglovisbig">
+        <button onclick="quest40()" class="questmark" id="qm3" >!</button>
+        <button onclick="quest20()" class="questmark" id="qm1" >!</button>
+        <p class="dialog" id="log6">Hey!! Nice to see you after all these years pal. I think i can help you. You can buy food here on market but with rum its another story. <button onclick="quest21()" >-Next-</button> </p>
+        <p class="dialog" id="log7">Rum is quite scarce commodity in Glovis. Sugar cane does not grow here and we are in war with Iberians, which are the biggest producers of rum. We buy rum from Franks but it barely will cover our needs. <button onclick="quest22()" >-Next-</button> </p>
+        <p class="dialog" id="log8">But i have a suggestion. I have friend named Garcia in Castelio who can get some rum but i need someone to smuggle it back to me. If you can do it i will pay you generously. <button onclick="quest23()" >-Take a job-</button>
+        <p class="dialog" id="log9">Wonderfull, happy voyage, i will wait for you buddy. <button onclick="quest24()" >-End-</button> </p>
+        <p class="dialog" id="log13">Welcome friends ... do you have it all? <button onclick="quest41()" >-Give-</button> </p>
+        <p class="dialog" id="log14">Good, good ... it's unloaded already. But I have a small problem. You know, I was robbed and now I don't have money. But don't worry, I'll make it up to you. I can return 50 barrels and add 30 slaves. What do you say? <button onclick="quest42()" >-Agree-</button> </p>
+        <p class="dialog" id="log15">I am really sorry, thank you. Take this slaves on Colon to La Corda. I have contact there, monsignore Benevolent, it will benefit you. I must go now. Bye <button onclick="quest43()" >-Leave-</button> </p>
+
+        <div class="towninfo">
+            <button onclick="menuCaerGlovisOff()">&#x24E7;</button>
+            <h1>Caer Glovis</h1>
+            <p class="info">It is the largest port on the volcanic island of Hephaestus. It is ruled by the powerful Nordic Hanza Trade Alliance. They are in war with Iberian Principality on west and keep trade relationships with Franks on South.</p>
+            <div class="tips">TRADE KNOWLEDGE <br> <p>Skillfull blacksmith - tools export</p><p>Desperate drinkers - rum import</p></div>
+        </div>
+        <div class="market" id="glovismarket">
+            <h2> MARKET </h2> <span class="marketinfo"> -dock to trade</span><br>
+            <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodglovisstock">1000</span> <br><span id="foodglovisprice">10</span> / <span id="foodglovispricesell">9.1</span><br>
+                <button onclick="foodGlovisBuy()">Buy +10</button>    
+                <button onclick="foodGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timberglovisstock">1000</span> <br><span id="timberglovisprice">62.5</span> / <span id="timberglovispricesell">55.6</span><br>
+                <button onclick="timberGlovisBuy()">Buy +10</button>    
+                <button onclick="timberGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textilglovisstock">40</span> <br><span id="textilglovisprice">62.5</span> / <span id="textilglovispricesell">55.6</span><br>
+                <button onclick="textilGlovisBuy()">Buy +10</button>    
+                <button onclick="textilGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slavesglovisstock">40</span> <br><span id="slavesglovisprice">83.3</span> / <span id="slavesglovispricesell">71.4</span><br>
+                <button onclick="slavesGlovisBuy()">Buy +10</button>    
+                <button onclick="slavesGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottonglovisstock">20</span> <br><span id="cottonglovisprice">62.5</span> / <span id="cottonglovispricesell">55.6</span><br>
+                <button onclick="cottonGlovisBuy()">Buy +10</button>    
+                <button onclick="cottonGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumglovisstock">30</span> <br><span id="rumglovisprice">37.5</span> / <span id="rumglovispricesell">33.3</span><br>
+                <button onclick="rumGlovisBuy()">Buy +10</button>    
+                <button onclick="rumGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolsglovisstock">1900</span> <br><span id="toolsglovisprice">62.5</span> / <span id="toolsglovispricesell">55.6</span><br>
+                <button onclick="toolsGlovisBuy()">Buy +10</button>    
+                <button onclick="toolsGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunsglovisstock">40</span> <br><span id="gunsglovisprice">62.5</span> / <span id="gunsglovispricesell">55.6</span><br>
+                <button onclick="gunsGlovisBuy()">Buy +10</button>    
+                <button onclick="gunsGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccoglovisstock">20</span> <br><span id="tabaccoglovisprice">40</span> / <span id="tabaccoglovispricesell">33.3</span><br>
+                <button onclick="tabaccoGlovisBuy()">Buy +10</button>    
+                <button onclick="tabaccoGlovisSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugarglovisstock">20</span> <br><span id="sugarglovisprice">62.5</span> / <span id="sugarglovispricesell">55.6</span><br>
+                <button onclick="sugarGlovisBuy()">Buy +10</button>    
+                <button onclick="sugarGlovisSell()">Sell -10</button>        
+            </p>
+        </div>
+    </div>
+    <div class="townmenu" id="menuoponaluhana">
+        <img src="./src/oponaluhanabig.jpg" alt="opona" class="townbig">
+        <img src="./src/northeast.gif" alt="ship" id="shipoponabig">
+        <button onclick="quest60()" class="questmark" id="qm5" >!</button>
+        <p class="dialog" id="log20">Hey, white face... You smart... you do me happy. Give me Give me stormwood. Bum Bum <button onclick="quest61()" >-Give-</button> </p>
+        <p class="dialog" id="log21">You friend of my people, you can buy everything. <button onclick="quest62()" >-Leave-</button> </p>
+        <div class="towninfo">
+            <button onclick="menuOponaLuHanaOff()">&#x24E7;</button>
+            <h1>Opona-Lu-Hana</h1>
+            <p class="info">The city of the most powerful tribe of natives. They capture natives from other tribes and sell them into slavery. They also grow a new tobacco plant for smoking. They trade only in francs.</p>
+            <div class="tips">TRADE KNOWLEDGE <br> <p>Cruel slavers - slaves export</p><p>Cancer dealers - tabacco export</p><p>Hedonist - import dependency</p> </div>
+        </div>
+        <div class="market" id="oponamarket">
+            <h2> MARKET </h2> <span class="marketinfo"> -complete questline</span><br>
+            <div id="oponaquest">
+                <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodoponastock">200</span> <br><span id="foodoponaprice">10</span> / <span id="foodoponapricesell">9.1</span><br>
+                    <button onclick="foodOponaBuy()">Buy +10</button>    
+                    <button onclick="foodOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timberoponastock">200</span> <br><span id="timberoponaprice">62.5</span> / <span id="timberoponapricesell">55.6</span><br>
+                    <button onclick="timberOponaBuy()">Buy +10</button>    
+                    <button onclick="timberOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textiloponastock">8</span> <br><span id="textiloponaprice">62.5</span> / <span id="textiloponapricesell">55.6</span><br>
+                    <button onclick="textilOponaBuy()">Buy +10</button>    
+                    <button onclick="textilOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slavesoponastock">600</span> <br><span id="slavesoponaprice">83.3</span> / <span id="slavesoponapricesell">71.4</span><br>
+                    <button onclick="slavesOponaBuy()">Buy +10</button>    
+                    <button onclick="slavesOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottonoponastock">20</span> <br><span id="cottonoponaprice">62.5</span> / <span id="cottonoponapricesell">55.6</span><br>
+                    <button onclick="cottonOponaBuy()">Buy +10</button>    
+                    <button onclick="cottonOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumoponastock">40</span> <br><span id="rumoponaprice">37.5</span> / <span id="rumoponapricesell">33.3</span><br>
+                    <button onclick="rumOponaBuy()">Buy +10</button>    
+                    <button onclick="rumOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolsoponastock">40</span> <br><span id="toolsoponaprice">62.5</span> / <span id="toolsoponapricesell">55.6</span><br>
+                    <button onclick="toolsOponaBuy()">Buy +10</button>    
+                    <button onclick="toolsOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunsoponastock">8</span> <br><span id="gunsoponaprice">62.5</span> / <span id="gunsoponapricesell">55.6</span><br>
+                    <button onclick="gunsOponaBuy()">Buy +10</button>    
+                    <button onclick="gunsOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccooponastock">600</span> <br><span id="tabaccooponaprice">40</span> / <span id="tabaccooponapricesell">33.3</span><br>
+                    <button onclick="tabaccoOponaBuy()">Buy +10</button>    
+                    <button onclick="tabaccoOponaSell()">Sell -10</button>        
+                </p>
+                <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugaroponastock">20</span> <br><span id="sugaroponaprice">62.5</span> / <span id="sugaroponapricesell">55.6</span><br>
+                    <button onclick="sugarOponaBuy()">Buy +10</button>    
+                    <button onclick="sugarOponaSell()">Sell -10</button>        
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="townmenu" id="menulacorda">
+        <img src="./src/lacordabig.jpg" alt="corda" class="townbig">
+        <img src="./src/southeast.gif" alt="ship" id="shipcordabig">
+        <button onclick="quest70()" class="questmark" id="qm6" >!</button>
+        <button onclick="quest50()" class="questmark" id="qm4" >!</button>
+        <p class="dialog" id="log16">Buenos días my friends, yes ... yes ... I'm interested in buying some slaves. We are planning a small celebration here. He He ... Can I see them?.<button onclick="quest51()" >-Show them-</button> </p>
+        <p class="dialog" id="log17">Ay Dios mio, these are nice pieces of meat. I'll take them all. This celebration will be wonderful. Ha ha, here... take this 900 pieces of gold.<button onclick="quest52()" >-Sell them-</button> </p>
+        <p class="dialog" id="log18">Perfecto, sometimes it's hard to get nice slaves here. The natives only trade in Francs, unfortunately. Listen, do you have interest in some work?<button onclick="quest53()" >-Agree-</button> </p>
+        <p class="dialog" id="log19">Perfecto, the natives of Opona-Lu-Hana desperately want weapons, but the Franks limit their supplies. Sail south to Garniet and buy 100 weapons. And then offer them to the chief as a bribe. Bring me some new meat and I'll pay you back.<button onclick="quest54()">-Leave-</button> </p>
+        <p class="dialog" id="log22">A... you are back, wonderfull. Do you bring me someting? I need at least 50 slaves. I will give you 1500 pieces of gold.<button onclick="quest71()">-Give-</button> </p>
+        <p class="dialog" id="log23">Perfecto, you are wise man, explore rest of this world, build your fortune and find a nice house.Good luck.<button onclick="quest72()">-Leave-</button> </p>
+        <p class="dialog" id="log24">Captain, if I may ... We should return to our base and build something more stable. Maybe we could start growing something, who knows. This world now lies open before you and is full of very limited possibilities.<button onclick="quest73()">-SANDBOX-</button> </p>
+        <div class="towninfo">
+            <button onclick="menuLaCordaOff()">&#x24E7;</button>
+            <h1>La Corda</h1>
+            <p class="info">The largest port on the island of Colon is under the Iberian rule. It is a famous place of pilgrimage thanks to the Cathedral of St. Adolf and, paradoxically, the largest producer of rum in the region. </p>
+            <div class="tips">TRADE KNOWLEDGE <br> <p>Skillfull brewers - rum export</p><p>Productive farmers - sugar export</p><p>Holy perverts - slaves demand</p> </div>
+        </div>
+        <div class="market" id="cordamarket">
+            <h2> MARKET </h2> <span class="marketinfo"> -dock to trade</span><br>
+            <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodcordastock">840</span> <br><span id="foodcordaprice">10</span> / <span id="foodcordapricesell">9.1</span><br>
+                <button onclick="foodCordaBuy()">Buy +10</button>    
+                <button onclick="foodCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timbercordastock">840</span> <br><span id="timbercordaprice">62.5</span> / <span id="timbercordapricesell">55.6</span><br>
+                <button onclick="timberCordaBuy()">Buy +10</button>    
+                <button onclick="timberCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textilcordastock">42</span> <br><span id="textilcordaprice">62.5</span> / <span id="textilcordapricesell">55.6</span><br>
+                <button onclick="textilCordaBuy()">Buy +10</button>    
+                <button onclick="textilCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slavescordastock">200</span> <br><span id="slavescordaprice">83.3</span> / <span id="slavescordapricesell">71.4</span><br>
+                <button onclick="slavesCordaBuy()">Buy +10</button>    
+                <button onclick="slavesCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottoncordastock">20</span> <br><span id="cottoncordaprice">62.5</span> / <span id="cottoncordapricesell">55.6</span><br>
+                <button onclick="cottonCordaBuy()">Buy +10</button>    
+                <button onclick="cottonCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumcordastock">2560</span> <br><span id="rumcordaprice">37.5</span> / <span id="rumcordapricesell">33.3</span><br>
+                <button onclick="rumCordaBuy()">Buy +10</button>    
+                <button onclick="rumCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolscordastock">160</span> <br><span id="toolscordaprice">62.5</span> / <span id="toolscordapricesell">55.6</span><br>
+                <button onclick="toolsCordaBuy()">Buy +10</button>    
+                <button onclick="toolsCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunscordastock">42</span> <br><span id="gunscordaprice">62.5</span> / <span id="gunscordapricesell">55.6</span><br>
+                <button onclick="gunsCordaBuy()">Buy +10</button>    
+                <button onclick="gunsCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccocordastock">20</span> <br><span id="tabaccocordaprice">40</span> / <span id="tabaccocordapricesell">33.3</span><br>
+                <button onclick="tabaccoCordaBuy()">Buy +10</button>    
+                <button onclick="tabaccoCordaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugarcordastock">1790</span> <br><span id="sugarcordaprice">62.5</span> / <span id="sugarcordapricesell">55.6</span><br>
+                <button onclick="sugarCordaBuy()">Buy +10</button>    
+                <button onclick="sugarCordaSell()">Sell -10</button>        
+            </p>
+        </div>
+    </div>
+    <div class="townmenu" id="menucastelio">
+        <img src="./src/casteliobig.jpg" alt="castelio" class="townbig">
+        <img src="./src/southwest.gif" alt="ship" id="shipcasteliobig">
+        <button onclick="quest30()" class="questmark" id="qm2" >!</button>
+        <p class="dialog" id="log10">Rodrigo Garcia de la Puta is my name, Senores ... If I correctly guess, you are here for the "goods." <button onclick="quest31()" >-Confirm-</button> </p>
+        <p class="dialog" id="log11">Excellent, the price is 40 gold for 10 barrels and the ordered quantity was 100. It will be 400 gold.  <button onclick="quest32()" >-Pay-</button> </p>
+        <p class="dialog" id="log12">Excellent, I'm leaving now. No one should see us together.  <button onclick="quest33()" >-Leave-</button> </p>
+        <div class="towninfo">
+            <button onclick="menuCastelioOff()">&#x24E7;</button>
+            <h1>Castelio</h1>
+            <p class="info">It is a large fortress on the island of Picklerick. It is home to the Iberian military command and there are large cotton plantations.</p>
+            <div class="tips">TRADE KNOWLEDGE <br> <p>Productive farmers - cotton export</p> <p>Recruit traners - guns demand</p> </div>
+        </div>
+        <div class="market" id="casteliomarket">
+            <h2> MARKET </h2> <span class="marketinfo"> -dock to trade</span><br>
+            <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodcasteliostock">680</span> <br><span id="foodcastelioprice">10</span> / <span id="foodcasteliopricesell">9.1</span><br>
+                <button onclick="foodCastelioBuy()">Buy +10</button>    
+                <button onclick="foodCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timbercasteliostock">680</span> <br><span id="timbercastelioprice">62.5</span> / <span id="timbercasteliopricesell">55.6</span><br>
+                <button onclick="timberCastelioBuy()">Buy +10</button>    
+                <button onclick="timberCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textilcasteliostock">34</span> <br><span id="textilcastelioprice">62.5</span> / <span id="textilcasteliopricesell">55.6</span><br>
+                <button onclick="textilCastelioBuy()">Buy +10</button>    
+                <button onclick="textilCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slavescasteliostock">34</span> <br><span id="slavescastelioprice">83.3</span> / <span id="slavescasteliopricesell">71.4</span><br>
+                <button onclick="slavesCastelioBuy()">Buy +10</button>    
+                <button onclick="slavesCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottoncasteliostock">20</span> <br><span id="cottoncastelioprice">62.5</span> / <span id="cottoncasteliopricesell">55.6</span><br>
+                <button onclick="cottonCastelioBuy()">Buy +10</button>    
+                <button onclick="cottonCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumcasteliostock">170</span> <br><span id="rumcastelioprice">37.5</span> / <span id="rumcasteliopricesell">33.3</span><br>
+                <button onclick="rumCastelioBuy()">Buy +10</button>    
+                <button onclick="rumCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolscasteliostock">170</span> <br><span id="toolscastelioprice">62.5</span> / <span id="toolscasteliopricesell">55.6</span><br>
+                <button onclick="toolsCastelioBuy()">Buy +10</button>    
+                <button onclick="toolsCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunscasteliostock">240</span> <br><span id="gunscastelioprice">62.5</span> / <span id="gunscasteliopricesell">55.6</span><br>
+                <button onclick="gunsCastelioBuy()">Buy +10</button>    
+                <button onclick="gunsCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccocasteliostock">20</span> <br><span id="tabaccocastelioprice">40</span> / <span id="tabaccocasteliopricesell">33.3</span><br>
+                <button onclick="tabaccoCastelioBuy()">Buy +10</button>    
+                <button onclick="tabaccoCastelioSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugarcasteliostock">90</span> <br><span id="sugarcastelioprice">62.5</span> / <span id="sugarcasteliopricesell">55.6</span><br>
+                <button onclick="sugarCastelioBuy()">Buy +10</button>    
+                <button onclick="sugarCastelioSell()">Sell -10</button>        
+            </p>
+        </div>
+    </div>
+    <div class="townmenu" id="menugarniet">
+        <img src="./src/garnietbig.jpg" alt="garniet" class="townbig">
+        <img src="./src/southwest.gif" alt="ship" id="shipgarnietbig">
+        <div class="towninfo">
+            <button onclick="menuGarnietOff()">&#x24E7;</button>
+            <h1>Garniet</h1>
+            <p class="info">The powerfull fortress of the Frankish Empire is located on the island of Surender. Garniet is known for its guns production.</p>
+            <div class="tips">TRADE KNOWLEDGE <br> <p>Weaponmasters - guns export</p> </div>
+        </div>
+        <div class="market" id="garnietmarket">
+            <h2> MARKET </h2> <span class="marketinfo"> -dock to trade</span><br>
+            <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodgarnietstock">1320</span> <br><span id="foodgarnietprice">10</span> / <span id="foodgarnietpricesell">9.1</span><br>
+                <button onclick="foodGarnietBuy()">Buy +10</button>    
+                <button onclick="foodGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timbergarnietstock">1320</span> <br><span id="timbergarnietprice">62.5</span> / <span id="timbergarnietpricesell">55.6</span><br>
+                <button onclick="timberGarnietBuy()">Buy +10</button>    
+                <button onclick="timberGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textilgarnietstock">76</span> <br><span id="textilgarnietprice">62.5</span> / <span id="textilgarnietpricesell">55.6</span><br>
+                <button onclick="textilGarnietBuy()">Buy +10</button>    
+                <button onclick="textilGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slavesgarnietstock">76</span> <br><span id="slavesgarnietprice">83.3</span> / <span id="slavesgarnietpricesell">71.4</span><br>
+                <button onclick="slavesGarnietBuy()">Buy +10</button>    
+                <button onclick="slavesGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottongarnietstock">20</span> <br><span id="cottongarnietprice">62.5</span> / <span id="cottongarnietpricesell">55.6</span><br>
+                <button onclick="cottonGarnietBuy()">Buy +10</button>    
+                <button onclick="cottonGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumgarnietstock">380</span> <br><span id="rumgarnietprice">37.5</span> / <span id="rumgarnietpricesell">33.3</span><br>
+                <button onclick="rumGarnietBuy()">Buy +10</button>    
+                <button onclick="rumGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolsgarnietstock">380</span> <br><span id="toolsgarnietprice">62.5</span> / <span id="toolsgarnietpricesell">55.6</span><br>
+                <button onclick="toolsGarnietBuy()">Buy +10</button>    
+                <button onclick="toolsGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunsgarnietstock">76</span> <br><span id="gunsgarnietprice">62.5</span> / <span id="gunsgarnietpricesell">55.6</span><br>
+                <button onclick="gunsGarnietBuy()">Buy +10</button>    
+                <button onclick="gunsGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccogarnietstock">20</span> <br><span id="tabaccogarnietprice">40</span> / <span id="tabaccogarnietpricesell">33.3</span><br>
+                <button onclick="tabaccoGarnietBuy()">Buy +10</button>    
+                <button onclick="tabaccoGarnietSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugargarnietstock">20</span> <br><span id="sugargarnietprice">62.5</span> / <span id="sugargarnietpricesell">55.6</span><br>
+                <button onclick="sugarGarnietBuy()">Buy +10</button>    
+                <button onclick="sugarGarnietSell()">Sell -10</button>        
+            </p>
+        </div>
+    </div>
+    <div class="townmenu" id="menusaintcarolina">
+        <img src="./src/saintcarolinabig.jpg" alt="carolina" class="townbig">
+        <img src="./src/southeast.gif" alt="ship" id="shipcarolinabig">
+        <div class="towninfo">
+            <button onclick="menuSaintCarolinaOff()">&#x24E7;</button>
+            <h1>Saint Carolina</h1>
+            <p class="info">The capital of the whole region under the rule of the Frankish Empire, the trading artery between the old and the new world. It buys raw materials and exports them to the old world and imports quallity textil..</p>
+            <div class="tips">TRADE KNOWLEDGE <br> <p>Old world goods - textil export</p> <p>Old world gate - import raw mat.</p> </div>
+        </div>
+        <div class="market" id="carolinamarket">
+            <h2> MARKET </h2> <span class="marketinfo"> -dock to trade</span><br>
+            <p class="marketslot"><img src="./src/food.png" alt="food"> FOOD <img src="./src/food.png" alt="food"><br> Stock: <span id="foodcarolinastock">1800</span> <br><span id="foodcarolinaprice">10</span> / <span id="foodcarolinapricesell">9.1</span><br>
+                <button onclick="foodCarolinaBuy()">Buy +10</button>    
+                <button onclick="foodCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/timber.png" alt="timber"> TIMBER <img src="./src/timber.png" alt="timber"><br> Stock: <span id="timbercarolinastock">1800</span> <br><span id="timbercarolinaprice">62.5</span> / <span id="timbercarolinapricesell">55.6</span><br>
+                <button onclick="timberCarolinaBuy()">Buy +10</button>    
+                <button onclick="timberCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/textil.png" alt="textil"> TEXTIL <img src="./src/textil.png" alt="textil"><br> Stock: <span id="textilcarolinastock">580</span> <br><span id="textilcarolinaprice">62.5</span> / <span id="textilcarolinapricesell">55.6</span><br>
+                <button onclick="textilCarolinaBuy()">Buy +10</button>    
+                <button onclick="textilCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/slaves.png" alt="slaves"> SLAVES <img src="./src/slaves.png" alt="slaves"><br> Stock: <span id="slavescarolinastock">580</span> <br><span id="slavescarolinaprice">83.3</span> / <span id="slavescarolinapricesell">71.4</span><br>
+                <button onclick="slavesCarolinaBuy()">Buy +10</button>    
+                <button onclick="slavesCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/cotton.png" alt="cotton"> COTTON <img src="./src/cotton.png" alt="cotton"><br> Stock: <span id="cottoncarolinastock">90</span> <br><span id="cottoncarolinaprice">62.5</span> / <span id="cottoncarolinapricesell">55.6</span><br>
+                <button onclick="cottonCarolinaBuy()">Buy +10</button>    
+                <button onclick="cottonCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/rum.png" alt="rum"> RUM <img src="./src/rum.png" alt="rum"><br> Stock: <span id="rumcarolinastock">500</span> <br><span id="rumcarolinaprice">37.5</span> / <span id="rumcarolinapricesell">33.3</span><br>
+                <button onclick="rumCarolinaBuy()">Buy +10</button>    
+                <button onclick="rumCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tools.png" alt="tools"> TOOLS <img src="./src/tools.png" alt="tools"><br> Stock: <span id="toolscarolinastock">500</span> <br><span id="toolscarolinaprice">62.5</span> / <span id="toolscarolinapricesell">55.6</span><br>
+                <button onclick="toolsCarolinaBuy()">Buy +10</button>    
+                <button onclick="toolsCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/guns.png" alt="guns"> GUNS <img src="./src/guns.png" alt="guns"><br> Stock: <span id="gunscarolinastock">580</span> <br><span id="gunscarolinaprice">62.5</span> / <span id="gunscarolinapricesell">55.6</span><br>
+                <button onclick="gunsCarolinaBuy()">Buy +10</button>    
+                <button onclick="gunsCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/tabacco.png" alt="tabacco"> TABACCO <img src="./src/tabacco.png" alt="tabacco"><br> Stock: <span id="tabaccocarolinastock">90</span> <br><span id="tabaccocarolinaprice">40</span> / <span id="tabaccocarolinapricesell">33.3</span><br>
+                <button onclick="tabaccoCarolinaBuy()">Buy +10</button>    
+                <button onclick="tabaccoCarolinaSell()">Sell -10</button>        
+            </p>
+            <p class="marketslot"><img src="./src/sugar.png" alt="sugar"> SUGAR <img src="./src/sugar.png" alt="sugar"><br> Stock: <span id="sugarcarolinastock">90</span> <br><span id="sugarcarolinaprice">62.5</span> / <span id="sugarcarolinapricesell">55.6</span><br>
+                <button onclick="sugarCarolinaBuy()">Buy +10</button>    
+                <button onclick="sugarCarolinaSell()">Sell -10</button>        
+            </p>
+        </div>
+    </div>
+<!-- GAMEMAP -->
+<div id="game">
+        <div id="map">
+            <div id="nightmap"></div>
+            <button onclick="menuHome()" class="town" id="home1">
+                <div id="homeicon"></div>
+                <div class="townname" id="homenamemap">Refuge</div>
+                <button onclick="homeDock()" class="dock" id="dockhome"></button>
+                <button onclick="homeDockOff()" class="undock" id="dockhomeoff"></button>
+            </button>
+            <button onclick="menuCaerGlovis()" class="town" id="caerglovis">
+                <div class="townname">Caer Glovis</div>
+                <img src="./src/caerglovis.png" alt="base">
+                <button onclick="glovisDock()" class="dock" id="dockglovis"></button>
+                <button onclick="glovisDockOff()" class="undock" id="dockglovisoff"></button>
+            </button>
+            <button onclick="menuOponaLuHana()" class="town" id="oponaluhana">
+                <img src="./src/oponaluhana.png" alt="base">
+                <div class="townname">Opona-lu-hana</div>
+                <button onclick="oponaDock()" class="dock" id="dockopona"></button>
+                <button onclick="oponaDockOff()" class="undock" id="dockoponaoff"></button>
+            </button>
+            <button onclick="menuLaCorda()" class="town" id="lacorda">
+                <img src="./src/lacorda.png" alt="base">
+                <div class="townname">La Corda</div>
+                <button onclick="cordaDock()" class="dock" id="dockcorda"></button>
+                <button onclick="cordaDockOff()" class="undock" id="dockcordaoff"></button>
+            </button>
+            <button onclick="menuCastelio()" class="town" id="castelio">
+                <img src="./src/castelio.png" alt="base">
+                <div class="townname">Castelio</div>
+                <button onclick="castelioDock()" class="dock" id="dockcastelio"></button>
+                <button onclick="castelioDockOff()" class="undock" id="dockcasteliooff"></button>
+            </button>
+            <button onclick="menuGarniet()" class="town" id="garniet">
+                <img src="./src/garniet.png" alt="base">
+                <div class="townname">Garniet</div>
+                <button onclick="garnietDock()" class="dock" id="dockgarniet"></button>
+                <button onclick="garnietDockOff()" class="undock" id="dockgarnietoff"></button>
+            </button>
+            <button onclick="menuSaintCarolina()" class="town" id="saintcarolina">
+                <img src="./src/saintcarolina.png" alt="base">
+                <div class="townname">Saint Carolina</div>
+                <button onclick="carolinaDock()" class="dock" id="dockcarolina"></button>
+                <button onclick="carolinaDockOff()" class="undock" id="dockcarolinaoff"></button>
+            </button>
+            <div id="player"></div>
+            <div id="boat1"></div>
+            <div id="boat2"></div>
+            <div id="boat3"></div>
+            <div id="boat4"></div>
+            <div id="oponaboat"></div>
+            <div id="glovistrader"></div>
+            <div id="glovisfisher"></div>
+            <div id="cordatrader"></div>
+            <div id="garniettrader"></div>
+            <div id="carolinatransport1"></div>
+            <div id="carolinatransport2"></div>
+            <div id="carolinatrader1"></div>
+            <div id="carolinatrader2"></div>
+        </div>
+    </div>   
+</body>
+</html>
